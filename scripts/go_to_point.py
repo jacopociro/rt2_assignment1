@@ -125,15 +125,15 @@ def go_to_point(req):
     des_yaw = req.theta
     change_state(0)
     while True:
-    	if state_ == 0:
-    		fix_yaw(desired_position)
-    	elif state_ == 1:
-    		go_straight_ahead(desired_position)
-    	elif state_ == 2:
-    		fix_final_yaw(des_yaw)
-    	elif state_ == 3:
-    		done()
-    		break
+        if state_ == 0:
+            fix_yaw(desired_position)
+        elif state_ == 1:
+            go_straight_ahead(desired_position)
+        elif state_ == 2:
+            fix_final_yaw(des_yaw)
+        elif state_ == 3:
+            done()
+            break
     return True
 
 def main():
