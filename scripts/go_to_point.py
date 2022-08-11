@@ -17,7 +17,7 @@ pub_ = None
 
 # parameters for control
 yaw_precision_ = math.pi / 9  # +/- 20 degree allowed
-yaw_precision_2_ = math.pi / 90  # +/- 2 degree allowed
+yaw_precision_2_ = math.pi / 9  # +/- 2 degree allowed
 dist_precision_ = 0.1
 kp_a = -3.0 
 kp_d = 0.2
@@ -28,7 +28,7 @@ ub_d = 0.6
 def clbk_odom(msg):
     global position_
     global yaw_
-
+    
     # position
     position_ = msg.pose.pose.position
 
@@ -56,7 +56,7 @@ def normalize_angle(angle):
 def fix_yaw(des_pos):
     desired_yaw = math.atan2(des_pos.y - position_.y, des_pos.x - position_.x)
     err_yaw = normalize_angle(desired_yaw - yaw_)
-    rospy.loginfo(err_yaw)
+    #rospy.loginfo(err_yaw)
     twist_msg = Twist()
     if math.fabs(err_yaw) > yaw_precision_2_:
         twist_msg.angular.z = kp_a*err_yaw
@@ -125,15 +125,15 @@ def go_to_point(req):
     des_yaw = req.theta
     change_state(0)
     while True:
-    	if state_ == 0:
-    		fix_yaw(desired_position)
-    	elif state_ == 1:
-    		go_straight_ahead(desired_position)
-    	elif state_ == 2:
-    		fix_final_yaw(des_yaw)
-    	elif state_ == 3:
-    		done()
-    		break
+        if state_ == 0:
+            fix_yaw(desired_position)
+        elif state_ == 1:
+            go_straight_ahead(desired_position)
+        elif state_ == 2:
+            fix_final_yaw(des_yaw)
+        elif state_ == 3:
+            done()
+            break
     return True
 
 def main():
