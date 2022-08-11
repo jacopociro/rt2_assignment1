@@ -2,11 +2,14 @@
 
 
 import rospy
-from geometry_msgs.msg import Twist, Point
+from geometry_msgs.msg import Twist, Point, Pose
 from nav_msgs.msg import Odometry
 from tf import transformations
 from rt2_assignment1.srv import Position
 import math
+import actionlib
+import actionlib.msg
+from rt2_assignment1 import msg
 
 # robot state variables
 position_ = Point()
@@ -120,28 +123,41 @@ def done():
     
 def go_to_point(req):
     desired_position = Point()
-    desired_position.x = req.x
-    desired_position.y = req.y
-    des_yaw = req.theta
+    desired_position.x = req.target_pose.pose.position.x
+    desired_position.y = req.target_pose.pose.position.y
+    des_yaw = req.target_pose.pose.position.z
     change_state(0)
     while True:
-    	if state_ == 0:
-    		fix_yaw(desired_position)
-    	elif state_ == 1:
-    		go_straight_ahead(desired_position)
-    	elif state_ == 2:
-    		fix_final_yaw(des_yaw)
-    	elif state_ == 3:
-    		done()
-    		break
+        if state_ == 0:
+            fix_yaw(desired_position)
+        elif state_ == 1:
+            go_straight_ahead(desired_position)
+        elif state_ == 2:
+            fix_final_yaw(des_yaw)
+        elif state_ == 3:
+            done()
+            action.set_succeeded()
+            break
+        elif action.is_preempt_requested():
+            rospy.loginfo ("ERROR: ACTION PREEMEPTION")
+            vel = Twist()
+            vel.linear.x = 0.0
+            vel.linear.y = 0.0
+            pub_.publish(vel)
+            action.set_preempted()
+            break
     return True
 
 def main():
-    global pub_
+    global pub_, action
     rospy.init_node('go_to_point')
     pub_ = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
-    service = rospy.Service('/go_to_point', Position, go_to_point)
+    #service = rospy.Service('/go_to_point', Position, go_to_point)
+    action = actionlib.SimpleActionServer('/go_to_point', msg.MovAction, go_to_point, auto_start=False)
+    action.start()
+    
+
     rospy.spin()
 
 if __name__ == '__main__':
