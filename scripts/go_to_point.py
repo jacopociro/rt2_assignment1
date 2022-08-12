@@ -128,7 +128,15 @@ def go_to_point(req):
     des_yaw = req.target_pose.pose.position.z
     change_state(0)
     while True:
-        if state_ == 0:
+        if action.is_preempt_requested():
+            rospy.loginfo ("ERROR: ACTION PREEMEPTION")
+            vel = Twist()
+            vel.linear.x = 0.0
+            vel.linear.y = 0.0
+            pub_.publish(vel)
+            action.set_preempted()
+            break        
+        elif state_ == 0:
             fix_yaw(desired_position)
         elif state_ == 1:
             go_straight_ahead(desired_position)
@@ -138,14 +146,7 @@ def go_to_point(req):
             done()
             action.set_succeeded()
             break
-        elif action.is_preempt_requested():
-            rospy.loginfo ("ERROR: ACTION PREEMEPTION")
-            vel = Twist()
-            vel.linear.x = 0.0
-            vel.linear.y = 0.0
-            pub_.publish(vel)
-            action.set_preempted()
-            break
+
     return True
 
 def main():
