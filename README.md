@@ -52,4 +52,10 @@ Now you need to open the correct Coppelia scene, called Coppelia.ttt, wait for i
 Press 0 to stop the robot.
 # ROBOT BEHAVIOUR
 The robot spawns in (0.0) and stays still until the user input tells it to move. It will then start moving to a random position and when it reaches this position will start going to a new random position until the user tells it to stop.
+
 # SYSTEM ARCHITECTURE
+![System Architecture](rosgraph.png)
+We have the node state_machine.cpp that is the center of the application, communicating with user_interface.py and calling the services in go_to_point.py and position_service.cpp. The node go_to_point.py is tasked with communication to the VREP simulation, via publisher/subscriber on both /odom and /cmd_vel.
+
+# SYSTEM LIMITATIONS AND POSSIBLE FUTURE IMPLEMENATIONS
+I had to lower the precision in the state that fixes the yaw before starting the linear movement as with higher precision the robot would get stuck in a never ending loop, going back and forth. This is due to how the proportional control is implemented in the go_to_point.py node and can be adress in future implementations.
