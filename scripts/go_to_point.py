@@ -59,7 +59,7 @@ def fix_yaw(des_pos):
     #rospy.loginfo(err_yaw)
     twist_msg = Twist()
     if math.fabs(err_yaw) > yaw_precision_2_:
-        twist_msg.angular.z = - kp_a*err_yaw
+        twist_msg.angular.z = kp_a*err_yaw
         if twist_msg.angular.z > ub_a:
             twist_msg.angular.z = lb_a
         elif twist_msg.angular.z < lb_a:
