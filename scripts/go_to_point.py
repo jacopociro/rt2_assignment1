@@ -17,7 +17,7 @@ pub_ = None
 
 # parameters for control
 yaw_precision_ = math.pi / 9  # +/- 20 degree allowed
-yaw_precision_2_ = math.pi / 90  # +/- 2 degree allowed
+yaw_precision_2_ = math.pi / 9  # +/- 2 degree allowed
 dist_precision_ = 0.1
 kp_a = -3.0 
 kp_d = 0.2
@@ -59,11 +59,11 @@ def fix_yaw(des_pos):
     #rospy.loginfo(err_yaw)
     twist_msg = Twist()
     if math.fabs(err_yaw) > yaw_precision_2_:
-        twist_msg.angular.z = kp_a*err_yaw
+        twist_msg.angular.z = - kp_a*err_yaw
         if twist_msg.angular.z > ub_a:
-            twist_msg.angular.z = ub_a
-        elif twist_msg.angular.z < lb_a:
             twist_msg.angular.z = lb_a
+        elif twist_msg.angular.z < lb_a:
+            twist_msg.angular.z = ub_a
     pub_.publish(twist_msg)
     # state change conditions
     if math.fabs(err_yaw) <= yaw_precision_2_:
@@ -103,9 +103,9 @@ def fix_final_yaw(des_yaw):
     if math.fabs(err_yaw) > yaw_precision_2_:
         twist_msg.angular.z = kp_a*err_yaw
         if twist_msg.angular.z > ub_a:
-            twist_msg.angular.z = ub_a
-        elif twist_msg.angular.z < lb_a:
             twist_msg.angular.z = lb_a
+        elif twist_msg.angular.z < lb_a:
+            twist_msg.angular.z = ub_a
     pub_.publish(twist_msg)
     # state change conditions
     if math.fabs(err_yaw) <= yaw_precision_2_:
