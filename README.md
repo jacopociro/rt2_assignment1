@@ -1,4 +1,4 @@
-# REPOSITORY DESCRPTION
+# REPOSITORY DESCRIPTION
  This repository is divided in 6 branches: main, action, ros2, jupyter, doxygen and sphinx.
  Branches main, action and ros2 are the branches for the first assignment divided as such:
  - main: branch with coppelia simulation
