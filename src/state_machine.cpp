@@ -28,7 +28,7 @@ int main(int argc, char **argv)
    ros::NodeHandle n1;
    ros::ServiceServer service= n.advertiseService("/user_interface", user_interface);
    ros::ServiceClient client_rp = n1.serviceClient<rt2_assignment1::RandomPosition>("/position_server");
-   //ros::ServiceClient client_p = n.serviceClient<rt2_assignment1::Position>("/go_to_point");
+   //this is where I initialize the action client
    actionlib::SimpleActionClient<rt2_assignment1::MovAction> action_client("/go_to_point");
    
    rt2_assignment1::RandomPosition rp;
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 
         else {
             if (action_client.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
-                std::cout << "Position Reached" << std::endl;
+                std::cout << "\nPosition Reached" << std::endl;
                 notmoving = true;
             }
         }
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     else {
             if (!notmoving){
                 action_client.cancelAllGoals();
-                std::cout << "Robot Stopping" << std::endl;
+                std::cout << "\nRobot Stopping" << std::endl;
                 notmoving = true;
             }
         }

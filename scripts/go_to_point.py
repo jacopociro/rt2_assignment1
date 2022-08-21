@@ -121,6 +121,7 @@ def done():
     twist_msg.angular.z = 0
     pub_.publish(twist_msg)
     
+# this is the callback function where I call the various states to move the robot
 def go_to_point(req):
     desired_position = Point()
     desired_position.x = req.target_pose.pose.position.x
@@ -154,7 +155,7 @@ def main():
     rospy.init_node('go_to_point')
     pub_ = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
-    #service = rospy.Service('/go_to_point', Position, go_to_point)
+    # this is where i initialize the action server
     action = actionlib.SimpleActionServer('/go_to_point', msg.MovAction, go_to_point, auto_start=False)
     action.start()
     
