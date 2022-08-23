@@ -78,8 +78,11 @@ The robot spawns in (0.0) and stays still until the user input tells it to move.
 
 # SYSTEM ARCHITECTURE
 ![System Architecture](rosgraph.png)
+
 *ros 1 system architecture*
+
 ![System Architecture](rosgraph_Ros2.png)
+
 *ros 2 system architecture*
 
 We have the node state_machine.cpp that is the center of the application, communicating with user_interface.py and calling the services and the action server in go_to_point.py and position_service.cpp. The node go_to_point.py is tasked with communication to the gazebo simulation, via publisher/subscriber on both /odom and /cmd_vel.
