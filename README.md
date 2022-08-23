@@ -40,7 +40,10 @@ jupyter notebook
 and search for the user_interface_nb.ipnyb file. From there run the various cells.
 
 # ROBOT BEHAVIOUR
+## Random behaviour
 The robot spawns in (0.0) and stays still until the user input tells it to move. It will then start moving to a random position and when it reaches this position will start going to a new random position until the user tells it to stop.
+## User controlled behaviour
+The robot follow the command of the user given with the buttons on the notebook file.
 
 # SYSTEM ARCHITECTURE
 ![System Architecture](rosgraph.png)
