@@ -1,0 +1,58 @@
+The package is composed of\+:
+\begin{DoxyItemize}
+\item Four nodes\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{go__to__point_8py}{go\+\_\+to\+\_\+point.\+py}}
+\item \mbox{\hyperlink{position__service_8cpp}{position\+\_\+service.\+cpp}}
+\item \mbox{\hyperlink{state__machine_8cpp}{state\+\_\+machine.\+cpp}}
+\end{DoxyItemize}
+\item Three custom services\+:
+\begin{DoxyItemize}
+\item Command.\+srv
+\item Position.\+srv
+\item Random\+Position.\+srv
+\end{DoxyItemize}
+\item One launch file\+:
+\begin{DoxyItemize}
+\item sim.\+launch
+\end{DoxyItemize}
+\item One action file\+:
+\begin{DoxyItemize}
+\item Mov.\+action
+\end{DoxyItemize}
+\item One urdf file\+:
+\begin{DoxyItemize}
+\item my\+\_\+robot.\+urdf
+\end{DoxyItemize}
+\item One notebook file\+:
+\begin{DoxyItemize}
+\item user\+\_\+interface\+\_\+nb.\+ipnyb
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md1}{}\doxysection{N\+O\+D\+ES}\label{md__r_e_a_d_m_e_autotoc_md1}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysubsection{go\+\_\+to\+\_\+point.\+py}\label{md__r_e_a_d_m_e_autotoc_md2}
+Implements the action service (Mov.\+action) that, when called, requests a position , runs the algorithm to control the robot and return a boolean true value as response. The algorithm reads from /odom the current position and orientation and, knowing the goal, calculates the linear and angular speed to send on the /cmd\+\_\+vel topic. All of this is done with a state machine that has three states. \hypertarget{md__r_e_a_d_m_e_autotoc_md3}{}\doxysubsection{position\+\_\+service.\+cpp}\label{md__r_e_a_d_m_e_autotoc_md3}
+Implements a service (Random\+Position.\+srv) that, given a range, returns a random position for the robot to reach. \hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{state\+\_\+machine.\+cpp}\label{md__r_e_a_d_m_e_autotoc_md4}
+This is the node that calls both the services in \mbox{\hyperlink{go__to__point_8py}{go\+\_\+to\+\_\+point.\+py}} and \mbox{\hyperlink{position__service_8cpp}{position\+\_\+service.\+cpp}} and the service that is called in \mbox{\hyperlink{user__interface_8py}{user\+\_\+interface.\+py}}. This node waits for \mbox{\hyperlink{user__interface_8py}{user\+\_\+interface.\+py}} to tell it to call the other two services and start the robot.\hypertarget{md__r_e_a_d_m_e_autotoc_md5}{}\doxysection{G\+A\+Z\+E\+B\+O S\+I\+M\+U\+L\+A\+T\+I\+ON}\label{md__r_e_a_d_m_e_autotoc_md5}
+This package is uses a gazebo simulation. The robot urdf is defined in my\+\_\+robot.\+urdf\hypertarget{md__r_e_a_d_m_e_autotoc_md6}{}\doxysection{H\+O\+W T\+O R\+U\+N T\+H\+E P\+A\+C\+K\+A\+GE}\label{md__r_e_a_d_m_e_autotoc_md6}
+Open up two terminals. In the first one you will need to run the roscore and the nodes using the launch file\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{roslaunch rt2\_assignment1 sim.launch}
+\end{DoxyCode}
+
+
+In another terminal run\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{jupyter notebook}
+\end{DoxyCode}
+
+
+and search for the user\+\_\+interface\+\_\+nb.\+ipnyb file. From there run the various cells.\hypertarget{md__r_e_a_d_m_e_autotoc_md7}{}\doxysection{R\+O\+B\+O\+T B\+E\+H\+A\+V\+I\+O\+UR}\label{md__r_e_a_d_m_e_autotoc_md7}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md8}{}\doxysubsection{Random behaviour}\label{md__r_e_a_d_m_e_autotoc_md8}
+The robot spawns in (0.\+0) and stays still until the user input tells it to move. It will then start moving to a random position and when it reaches this position will start going to a new random position until the user tells it to stop. \hypertarget{md__r_e_a_d_m_e_autotoc_md9}{}\doxysubsection{User controlled behaviour}\label{md__r_e_a_d_m_e_autotoc_md9}
+The robot follow the command of the user given with the buttons on the notebook file.\hypertarget{md__r_e_a_d_m_e_autotoc_md10}{}\doxysection{S\+Y\+S\+T\+E\+M A\+R\+C\+H\+I\+T\+E\+C\+T\+U\+RE}\label{md__r_e_a_d_m_e_autotoc_md10}
+ We have the node \mbox{\hyperlink{state__machine_8cpp}{state\+\_\+machine.\+cpp}} that is the center of the application, communicating with \mbox{\hyperlink{user__interface_8py}{user\+\_\+interface.\+py}} and calling the services and the action server in \mbox{\hyperlink{go__to__point_8py}{go\+\_\+to\+\_\+point.\+py}} and \mbox{\hyperlink{position__service_8cpp}{position\+\_\+service.\+cpp}}. The node \mbox{\hyperlink{go__to__point_8py}{go\+\_\+to\+\_\+point.\+py}} is tasked with communication to the gazebo simulation, via publisher/subscriber on both /odom and /cmd\+\_\+vel.\hypertarget{md__r_e_a_d_m_e_autotoc_md11}{}\doxysection{S\+Y\+S\+T\+E\+M L\+I\+M\+I\+T\+A\+T\+I\+O\+N\+S A\+N\+D P\+O\+S\+S\+I\+B\+L\+E F\+U\+T\+U\+R\+E I\+M\+P\+L\+E\+M\+E\+N\+A\+T\+I\+O\+NS}\label{md__r_e_a_d_m_e_autotoc_md11}
+Possible future implementations could be\+:
+\begin{DoxyItemize}
+\item a simpler user interface, reducing the number of buttons
+\item a clearer interface in the plotting of the position and the orientation 
+\end{DoxyItemize}

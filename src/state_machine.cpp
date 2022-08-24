@@ -1,3 +1,35 @@
+/** @ package rt2_assignment1
+* 
+*  \file state_machine.cpp
+*  \brief This node implements the FSM (finite state machine)
+*
+*  \author Jacopo Ciro Soncini
+*  \version 1.0
+*  \date 24/8/2022
+*  \details
+*   
+*  Subscribes to: <BR>
+*	None
+*
+*  Publishes to: <BR>
+*	None
+*
+*  Services: <BR>
+*   /user_interface
+* 
+*  Client: <BR>
+*	/position_server
+*
+*  Action Client: <BR>
+*   /go_to_point
+*
+*  Description: <BR>
+*   This node is the center of the system architercture, calling the user_interface, the position and the action clients.
+*   It implements a server for /user_interface, handling the user input and acts with it. In case the user asks for random
+*   behaviour it starts it and waits for a stop or different command.
+*   
+*/
+
 #include "ros/ros.h"
 #include "rt2_assignment1/Command.h"
 #include "rt2_assignment1/Position.h"
@@ -8,6 +40,16 @@
 
 
 bool start = false;
+
+/**
+ * \brief: It read the user input
+ * \param req: Command Request
+ * \param res: Command Response
+ * 
+ * \return: true
+ * 
+ * This function saves the bloabl variable to start or stop the random behaviour.
+ */
 
 bool user_interface(rt2_assignment1::Command::Request &req, rt2_assignment1::Command::Response &res){
     if (req.command == "start"){
@@ -21,11 +63,23 @@ bool user_interface(rt2_assignment1::Command::Request &req, rt2_assignment1::Com
 
 bool notmoving = true;
 
+/**
+ * \brief: Main function
+ * 
+ * \return: 0
+ * 
+ * The main function initializes the ros node and clients. Then it starts the algorithm.
+ * If the start boolean is true (random behaviour) I set a goal and start checking if I reach or abort the goal.
+ * 
+ */
+
 int main(int argc, char **argv)
 {
+    // ros node initialization
    ros::init(argc, argv, "state_machine");
    ros::NodeHandle n;
    ros::NodeHandle n1;
+   // server and client initialization
    ros::ServiceServer service= n.advertiseService("/user_interface", user_interface);
    ros::ServiceClient client_rp = n1.serviceClient<rt2_assignment1::RandomPosition>("/position_server");
    //ros::ServiceClient client_p = n.serviceClient<rt2_assignment1::Position>("/go_to_point");
@@ -42,7 +96,9 @@ int main(int argc, char **argv)
    	ros::spinOnce();
     
    	if (start){
+        // random behaviour
         if (notmoving){
+        // robot is still
    		client_rp.call(rp);
         rt2_assignment1::MovGoal objective;
         objective.target_pose.header.frame_id = "base_link";
@@ -54,8 +110,9 @@ int main(int argc, char **argv)
         action_client.sendGoal(objective);
         notmoving = false;
         }
-
+       
         else {
+            // robot is moving, i check goal status
             if (action_client.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
                 std::cout << "Position Reached" << std::endl;
                 notmoving = true;
@@ -63,7 +120,9 @@ int main(int argc, char **argv)
         }
     }
     else {
+        // stop random behaviour
             if (!notmoving){
+                // goal abortion
                 action_client.cancelAllGoals();
                 std::cout << "Robot Stopping" << std::endl;
                 notmoving = true;
