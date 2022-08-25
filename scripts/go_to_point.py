@@ -1,5 +1,41 @@
 #! /usr/bin/env python
 
+"""
+.. module:: go_to_point
+    :platform: Unix
+    :synopsis: go to point algorithm for the robot to reach the imposed goal.
+    
+.. moduleauthor:: Jacopo Ciro Soncini
+
+
+This node is the node tasked with making sure that the robot reaches the goal, both in orientation and position.
+The behaviour is handled with 3 states. The first one is tasked with aiming for the goal, using angular velocities. 
+The second state makes sure the robot reaches the goal, giving linear velocities. The last state handles the orientation
+given with the goal, using angular velocities. The angular and linear velocities are read on the /vel subscriber and sent 
+to the simulation via /cmd_vel publisher. The goal is handled with an action. On the /target publisher I publish the number
+of reached and aborted goal and, in case it is reached, the time to reach it.
+ 
+Subscribes to:
+
+/odom 
+
+/vel 
+
+Publishes to:
+
+/cmd_vel 
+
+/target
+
+Service :
+
+None
+
+Action Service
+
+/go_to_point
+
+"""
 
 import rospy
 from geometry_msgs.msg import Twist, Point, Pose
@@ -30,7 +66,20 @@ ub_a = 0.6
 lb_a = -0.5
 ub_d = 0.6
 
-def clbk_odom(msg):
+
+def clbk_odom(msg):    
+    """
+    
+    The callback saves the current position and orientation of the robot on global variables, reading it from /odom.
+    I needed to change the orientation from quaternion to euler.
+    
+    Args :
+        Odometry
+    
+    Returns :
+        None
+        
+    """
     global position_
     global yaw_
 
@@ -47,18 +96,50 @@ def clbk_odom(msg):
     yaw_ = euler[2]
 
 
-def change_state(state):
+def change_state(state):    
+    """
+    This function saves the passed parameter state to a global variable. Prints a message for 
+    clear output.
+    
+    Args :
+        state: Int
+    
+    Returns :
+        None
+    """
     global state_
     state_ = state
     print ('State changed to [%s]' % state_)
 
-
 def normalize_angle(angle):
+    """
+    This function receives and angle, normalizes it in the interval [-pi, pi] and returns the
+    new angle.
+    
+    Args :
+        angle: Float
+    
+    Returns :
+        Float
+    """    
     if(math.fabs(angle) > math.pi):
         angle = angle - (2 * math.pi * angle) / (math.fabs(angle))
     return angle
 
 def fix_yaw(des_pos):
+    """
+ 	This function calculates the yaw the robot needs to reach to face the goal and the publishes 
+    the angular velocity to reach it. The algorithm is implemented with a treshold that needs to be 
+    satisfied before changing state.
+    
+    Args :
+    
+        des_pos: array
+    
+    Returns :
+    
+        None
+    """
     desired_yaw = math.atan2(des_pos.y - position_.y, des_pos.x - position_.x)
     err_yaw = normalize_angle(desired_yaw - yaw_)
     rospy.loginfo(err_yaw)
@@ -77,6 +158,17 @@ def fix_yaw(des_pos):
 
 
 def go_straight_ahead(des_pos):
+    """
+ 	This function publishes the velocity to reach the goal until the set treshold is satisfied.
+    Then it changes the state.
+    
+    Args :
+        des_pos: array
+    
+    Returns :
+        None
+        
+    """
     desired_yaw = math.atan2(des_pos.y - position_.y, des_pos.x - position_.x)
     err_yaw = desired_yaw - yaw_
     err_pos = math.sqrt(pow(des_pos.y - position_.y, 2) +
@@ -102,6 +194,16 @@ def go_straight_ahead(des_pos):
         change_state(0)
 
 def fix_final_yaw(des_yaw):
+    """
+ 	This function publishes the velocity to reach the wanted orientation until the set treshold is satisfied.
+    Then it changes the state.
+    
+    Args :
+        des_yaw: Float
+    
+    Returns :
+        None
+    """
     err_yaw = normalize_angle(des_yaw - yaw_)
     rospy.loginfo(err_yaw)
     twist_msg = Twist()
@@ -118,15 +220,46 @@ def fix_final_yaw(des_yaw):
         change_state(3)
         
 def done():
+    """
+ 	This function is called when the robot has reached the goal and publishes all velocities
+    as zero. 
+    
+    Args :
+        None
+    
+    Returns :
+        None
+    """
     twist_msg = Twist()
     twist_msg.linear.x = 0
     twist_msg.angular.z = 0
     pub_.publish(twist_msg)
 
 def time_fun(t):
+    """
+ 	This function publishes the parameter on /target. The parameter is either -1 if the goal is aborted
+    or the time to reach the goal.
+    
+    Args :
+        Float32
+    
+    Returns :
+        None
+    """
     pub_time.publish(t)
 
 def go_to_point(req):
+    """
+ 	This function is the callback for the action. It saves the goals to global variables. 
+    It then enters a while loop where it handles the state and the various behaviours and the 
+    eventual goal preemption.
+    
+    Args :
+        goal: msg.MovAction
+    
+    Returns :
+        Bool
+    """
     # Timer
     timer_start = time.time()
     
@@ -142,15 +275,11 @@ def go_to_point(req):
             vel.linear.x = 0.0
             vel.linear.y = 0.0
             pub_.publish(vel)
-<<<<<<< HEAD
-            action.set_preempted()
-            break        
-=======
+
             t = time.time() - timer_start
             time_fun(-1)
             action.set_preempted()
             break
->>>>>>> jupyter
         elif state_ == 0:
             fix_yaw(desired_position)
         elif state_ == 1:
@@ -169,12 +298,31 @@ def go_to_point(req):
 global Velocity
 Velocity = Twist()
 def clbk_vel(vel):
+    """
+ 	This callback saves the velocited received on /vel on global variables that I will
+    use where needed.
+    
+    Args :
+        msg: Twist
+    
+    Returns :
+        None
+    """
     global Velocity
     Velocity.linear.x  = vel.linear.x
     Velocity.angular.z = vel.angular.z
 
     
 def main():
+    """
+ 	This is the main function. It initializes the node, the publisher, the subscribers and actionserver
+    
+    Args :
+        None
+    
+    Returns :
+        None
+    """
     global pub_, action, pub_time
     rospy.init_node('go_to_point')
     pub_ = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
