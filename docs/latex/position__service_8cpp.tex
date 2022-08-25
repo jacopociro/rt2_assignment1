@@ -1,0 +1,93 @@
+\hypertarget{position__service_8cpp}{}\doxysection{src/position\+\_\+service.cpp File Reference}
+\label{position__service_8cpp}\index{src/position\_service.cpp@{src/position\_service.cpp}}
+
+
+This node implements a random number server.  
+
+
+{\ttfamily \#include \char`\"{}ros/ros.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}rt2\+\_\+assignment1/\+Random\+Position.\+h\char`\"{}}\newline
+Include dependency graph for position\+\_\+service.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{position__service_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{position__service_8cpp_a10f83119b77a8fbd085a5550955f85ff}{rand\+M\+ToN}} (double M, double N)
+\begin{DoxyCompactList}\small\item\em \+: It returns a random number. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{position__service_8cpp_ab65b9ff5368189ad34fe4989d50742e4}\label{position__service_8cpp_ab65b9ff5368189ad34fe4989d50742e4}} 
+bool {\bfseries myrandom} (rt2\+\_\+assignment1\+::\+Random\+Position\+::\+Request \&req, rt2\+\_\+assignment1\+::\+Random\+Position\+::\+Response \&res)
+\item 
+int \mbox{\hyperlink{position__service_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\begin{DoxyCompactList}\small\item\em \+: Main function \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This node implements a random number server. 
+
+@ package rt2\+\_\+assignment1
+
+\begin{DoxyAuthor}{Author}
+Jacopo Ciro Soncini 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+24/8/2022
+\end{DoxyDate}
+Subscribes to\+: ~\newline
+ None
+
+Publishes to\+: ~\newline
+ None
+
+Services\+: ~\newline
+ /position\+\_\+server
+
+Action Services\+: ~\newline
+ None
+
+Description\+: ~\newline
+ This node implements the response for when the /position\+\_\+server is called. It returns a random number is given intervals. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{position__service_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{position__service_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{position\_service.cpp@{position\_service.cpp}!main@{main}}
+\index{main@{main}!position\_service.cpp@{position\_service.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+\+: Main function 
+
+\begin{DoxyReturn}{Returns}
+\+: 0
+\end{DoxyReturn}
+This function initializes the ros node and the server /position\+\_\+server. Then lays in wait for a request. \mbox{\Hypertarget{position__service_8cpp_a10f83119b77a8fbd085a5550955f85ff}\label{position__service_8cpp_a10f83119b77a8fbd085a5550955f85ff}} 
+\index{position\_service.cpp@{position\_service.cpp}!randMToN@{randMToN}}
+\index{randMToN@{randMToN}!position\_service.cpp@{position\_service.cpp}}
+\doxysubsubsection{\texorpdfstring{randMToN()}{randMToN()}}
+{\footnotesize\ttfamily double rand\+M\+ToN (\begin{DoxyParamCaption}\item[{double}]{M,  }\item[{double}]{N }\end{DoxyParamCaption})}
+
+
+
+\+: It returns a random number. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em M} & double \\
+\hline
+{\em N} & double\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: double
+\end{DoxyReturn}
+This function generates a random number in the interval \mbox{[}M,N\mbox{]} and returns it. 

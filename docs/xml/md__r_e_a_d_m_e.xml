@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="md__r_e_a_d_m_e" kind="page">
+    <compoundname>md_README</compoundname>
+    <title>DESCRIPTION OF CONTENT OF THE PACKAGE</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>The package is composed of:<itemizedlist>
+<listitem><para>Four nodes:<itemizedlist>
+<listitem><para>go_to_point.py</para>
+</listitem><listitem><para><ref refid="position__service_8cpp" kindref="compound">position_service.cpp</ref></para>
+</listitem><listitem><para><ref refid="state__machine_8cpp" kindref="compound">state_machine.cpp</ref></para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Three custom services:<itemizedlist>
+<listitem><para>Command.srv</para>
+</listitem><listitem><para>Position.srv</para>
+</listitem><listitem><para>RandomPosition.srv</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>One launch file:<itemizedlist>
+<listitem><para>sim.launch</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>One action file:<itemizedlist>
+<listitem><para>Mov.action</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>One urdf file:<itemizedlist>
+<listitem><para>my_robot.urdf</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>One notebook file:<itemizedlist>
+<listitem><para>user_interface_nb.ipnyb</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="md__r_e_a_d_m_e_1autotoc_md1">
+<title>NODES</title>
+<sect2 id="md__r_e_a_d_m_e_1autotoc_md2">
+<title>go_to_point.py</title>
+<para>Implements the action service (Mov.action) that, when called, requests a position , runs the algorithm to control the robot and return a boolean true value as response. The algorithm reads from /odom the current position and orientation and, knowing the goal, calculates the linear and angular speed to send on the /cmd_vel topic. All of this is done with a state machine that has three states. </para>
+</sect2>
+<sect2 id="md__r_e_a_d_m_e_1autotoc_md3">
+<title>position_service.cpp</title>
+<para>Implements a service (RandomPosition.srv) that, given a range, returns a random position for the robot to reach. </para>
+</sect2>
+<sect2 id="md__r_e_a_d_m_e_1autotoc_md4">
+<title>state_machine.cpp</title>
+<para>This is the node that calls both the services in go_to_point.py and <ref refid="position__service_8cpp" kindref="compound">position_service.cpp</ref> and the service that is called in user_interface.py. This node waits for user_interface.py to tell it to call the other two services and start the robot.</para>
+</sect2>
+</sect1>
+<sect1 id="md__r_e_a_d_m_e_1autotoc_md5">
+<title>GAZEBO SIMULATION</title>
+<para>This package is uses a gazebo simulation. The robot urdf is defined in my_robot.urdf</para>
+</sect1>
+<sect1 id="md__r_e_a_d_m_e_1autotoc_md6">
+<title>HOW TO RUN THE PACKAGE</title>
+<para>Open up two terminals. In the first one you will need to run the roscore and the nodes using the launch file: <programlisting><codeline><highlight class="normal">roslaunch<sp/>rt2_assignment1<sp/>sim.launch</highlight></codeline>
+</programlisting></para>
+<para>In another terminal run: <programlisting><codeline><highlight class="normal">jupyter<sp/>notebook</highlight></codeline>
+</programlisting></para>
+<para>and search for the user_interface_nb.ipnyb file. From there run the various cells.</para>
+</sect1>
+<sect1 id="md__r_e_a_d_m_e_1autotoc_md7">
+<title>ROBOT BEHAVIOUR</title>
+<sect2 id="md__r_e_a_d_m_e_1autotoc_md8">
+<title>Random behaviour</title>
+<para>The robot spawns in (0.0) and stays still until the user input tells it to move. It will then start moving to a random position and when it reaches this position will start going to a new random position until the user tells it to stop. </para>
+</sect2>
+<sect2 id="md__r_e_a_d_m_e_1autotoc_md9">
+<title>User controlled behaviour</title>
+<para>The robot follow the command of the user given with the buttons on the notebook file.</para>
+</sect2>
+</sect1>
+<sect1 id="md__r_e_a_d_m_e_1autotoc_md10">
+<title>SYSTEM ARCHITECTURE</title>
+<para><image type="html" name="rosgraph.png" inline="yes"></image>
+ We have the node <ref refid="state__machine_8cpp" kindref="compound">state_machine.cpp</ref> that is the center of the application, communicating with user_interface.py and calling the services and the action server in go_to_point.py and <ref refid="position__service_8cpp" kindref="compound">position_service.cpp</ref>. The node go_to_point.py is tasked with communication to the gazebo simulation, via publisher/subscriber on both /odom and /cmd_vel.</para>
+</sect1>
+<sect1 id="md__r_e_a_d_m_e_1autotoc_md11">
+<title>SYSTEM LIMITATIONS AND POSSIBLE FUTURE IMPLEMENATIONS</title>
+<para>Possible future implementations could be:<itemizedlist>
+<listitem><para>a simpler user interface, reducing the number of buttons</para>
+</listitem><listitem><para>a clearer interface in the plotting of the position and the orientation </para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

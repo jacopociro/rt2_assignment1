@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="_r_e_a_d_m_e_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>DESCRIPTION<sp/>OF<sp/>CONTENT<sp/>OF<sp/>THE<sp/>PACKAGE</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>package<sp/>is<sp/>composed<sp/>of:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Four<sp/>nodes:<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>go_to_point.py</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>position_service.cpp</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>state_machine.cpp</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Three<sp/>custom<sp/>services:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>Command.srv</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>Position.srv</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>RandomPosition.srv</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>One<sp/>launch<sp/>file:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>sim.launch</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>One<sp/>action<sp/>file:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>Mov.action</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>One<sp/>urdf<sp/>file:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>my_robot.urdf</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>One<sp/>notebook<sp/>file:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>user_interface_nb.ipnyb</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>NODES</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>go_to_point.py</highlight></codeline>
+<codeline><highlight class="normal">Implements<sp/>the<sp/>action<sp/>service<sp/>(Mov.action)<sp/>that,<sp/>when<sp/>called,<sp/>requests<sp/>a<sp/>position<sp/>,<sp/>runs<sp/>the<sp/>algorithm<sp/>to<sp/>control<sp/>the<sp/>robot<sp/>and<sp/>return<sp/>a<sp/>boolean<sp/>true<sp/>value<sp/>as<sp/>response.<sp/>The<sp/>algorithm<sp/>reads<sp/>from<sp/>/odom<sp/>the<sp/>current<sp/>position<sp/>and<sp/>orientation<sp/>and,<sp/>knowing<sp/>the<sp/>goal,<sp/>calculates<sp/>the<sp/>linear<sp/>and<sp/>angular<sp/>speed<sp/>to<sp/>send<sp/>on<sp/>the<sp/>/cmd_vel<sp/>topic.<sp/>All<sp/>of<sp/>this<sp/>is<sp/>done<sp/>with<sp/>a<sp/>state<sp/>machine<sp/>that<sp/>has<sp/>three<sp/>states.</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>position_service.cpp</highlight></codeline>
+<codeline><highlight class="normal">Implements<sp/>a<sp/>service<sp/>(RandomPosition.srv)<sp/>that,<sp/>given<sp/>a<sp/>range,<sp/>returns<sp/>a<sp/>random<sp/>position<sp/>for<sp/>the<sp/>robot<sp/>to<sp/>reach.</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>state_machine.cpp</highlight></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>the<sp/>node<sp/>that<sp/>calls<sp/>both<sp/>the<sp/>services<sp/>in<sp/>go_to_point.py<sp/>and<sp/>position_service.cpp<sp/>and<sp/>the<sp/>service<sp/>that<sp/>is<sp/>called<sp/>in<sp/>user_interface.py.<sp/>This<sp/>node<sp/>waits<sp/>for<sp/>user_interface.py<sp/>to<sp/>tell<sp/>it<sp/>to<sp/>call<sp/>the<sp/>other<sp/>two<sp/>services<sp/>and<sp/>start<sp/>the<sp/>robot.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>GAZEBO<sp/>SIMULATION</highlight></codeline>
+<codeline><highlight class="normal">This<sp/>package<sp/>is<sp/>uses<sp/>a<sp/>gazebo<sp/>simulation.<sp/>The<sp/>robot<sp/>urdf<sp/>is<sp/>defined<sp/>in<sp/>my_robot.urdf</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>HOW<sp/>TO<sp/>RUN<sp/>THE<sp/>PACKAGE</highlight></codeline>
+<codeline><highlight class="normal">Open<sp/>up<sp/>two<sp/>terminals.<sp/>In<sp/>the<sp/>first<sp/>one<sp/>you<sp/>will<sp/>need<sp/>to<sp/>run<sp/>the<sp/>roscore<sp/>and<sp/>the<sp/>nodes<sp/>using<sp/>the<sp/>launch<sp/>file:</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">roslaunch<sp/>rt2_assignment1<sp/>sim.launch</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">In<sp/>another<sp/>terminal<sp/>run:</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">jupyter<sp/>notebook</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>search<sp/>for<sp/>the<sp/>user_interface_nb.ipnyb<sp/>file.<sp/>From<sp/>there<sp/>run<sp/>the<sp/>various<sp/>cells.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>ROBOT<sp/>BEHAVIOUR</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>Random<sp/>behaviour</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>robot<sp/>spawns<sp/>in<sp/>(0.0)<sp/>and<sp/>stays<sp/>still<sp/>until<sp/>the<sp/>user<sp/>input<sp/>tells<sp/>it<sp/>to<sp/>move.<sp/>It<sp/>will<sp/>then<sp/>start<sp/>moving<sp/>to<sp/>a<sp/>random<sp/>position<sp/>and<sp/>when<sp/>it<sp/>reaches<sp/>this<sp/>position<sp/>will<sp/>start<sp/>going<sp/>to<sp/>a<sp/>new<sp/>random<sp/>position<sp/>until<sp/>the<sp/>user<sp/>tells<sp/>it<sp/>to<sp/>stop.</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>User<sp/>controlled<sp/>behaviour</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>robot<sp/>follow<sp/>the<sp/>command<sp/>of<sp/>the<sp/>user<sp/>given<sp/>with<sp/>the<sp/>buttons<sp/>on<sp/>the<sp/>notebook<sp/>file.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>SYSTEM<sp/>ARCHITECTURE</highlight></codeline>
+<codeline><highlight class="normal">![System<sp/>Architecture](rosgraph.png)</highlight></codeline>
+<codeline><highlight class="normal">We<sp/>have<sp/>the<sp/>node<sp/>state_machine.cpp<sp/>that<sp/>is<sp/>the<sp/>center<sp/>of<sp/>the<sp/>application,<sp/>communicating<sp/>with<sp/>user_interface.py<sp/>and<sp/>calling<sp/>the<sp/>services<sp/>and<sp/>the<sp/>action<sp/>server<sp/>in<sp/>go_to_point.py<sp/>and<sp/>position_service.cpp.<sp/>The<sp/>node<sp/>go_to_point.py<sp/>is<sp/>tasked<sp/>with<sp/>communication<sp/>to<sp/>the<sp/>gazebo<sp/>simulation,<sp/>via<sp/>publisher/subscriber<sp/>on<sp/>both<sp/>/odom<sp/>and<sp/>/cmd_vel.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>SYSTEM<sp/>LIMITATIONS<sp/>AND<sp/>POSSIBLE<sp/>FUTURE<sp/>IMPLEMENATIONS</highlight></codeline>
+<codeline><highlight class="normal">Possible<sp/>future<sp/>implementations<sp/>could<sp/>be:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>a<sp/>simpler<sp/>user<sp/>interface,<sp/>reducing<sp/>the<sp/>number<sp/>of<sp/>buttons</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>a<sp/>clearer<sp/>interface<sp/>in<sp/>the<sp/>plotting<sp/>of<sp/>the<sp/>position<sp/>and<sp/>the<sp/>orientation<sp/></highlight></codeline>
+<codeline></codeline>
+    </programlisting>
+    <location file="README.md"/>
+  </compounddef>
+</doxygen>
